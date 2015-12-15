@@ -1,6 +1,6 @@
 # FaceTrackerApp
 
-An android port of : [FaceTracker](https://github.com/kylemcdonald/FaceTracker)
+An Android port of : [Jason Saragih](http://jsaragih.org/) and [Kyle McDonald](http://kylemcdonald.net/)'s [FaceTracker](https://github.com/kylemcdonald/FaceTracker). Capable of tracking facial landmark points.  
 
 ## Requirements
 
