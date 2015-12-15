@@ -208,6 +208,7 @@ void android_main(android_app* app)
     //=========================================== Get internal storage paths
 
     std::string dataPath = engine.app->activity->internalDataPath;
+    LOGI("Internal data path: %s", dataPath.c_str());
     std::string ConfigFile = dataPath + "/face.con";//"storage/sdcard0/assets/model/face.con";
 	std::string TriFile = dataPath + "/face.tri";
 	std::string TrackerFile = dataPath + "/face.tracker";
@@ -221,7 +222,7 @@ void android_main(android_app* app)
         int32_t rescon = stat(dataPath.c_str(), &sb);
         int32_t restri = stat(dataPath.c_str(), &sc);
         int32_t restrack = stat(dataPath.c_str(), &sd);
-        int32_t resmodel = stat(dataPath.c_str(), &sm);
+//        int32_t resmodel = stat(dataPath.c_str(), &sm);
 
         if (0 == rescon && sb.st_mode & S_IFDIR)
         {
@@ -230,6 +231,7 @@ void android_main(android_app* app)
         else if (ENOENT == errno)
         {
             rescon = mkdir(dataPath.c_str(), 0770);
+            LOGD("'files/' dir created");
         }
 
         if (0 == rescon)
@@ -238,12 +240,13 @@ void android_main(android_app* app)
             rescon = stat(ConfigFile.c_str(), &sb);
             restri = stat(TriFile.c_str(), &sc);
             restrack = stat(TrackerFile.c_str(), &sd);
-            resmodel = stat(TrackerFile.c_str(), &sm);
-            if ((0 == rescon && sb.st_mode & S_IFREG) && (0 == restri && sc.st_mode & S_IFREG) && (0 == restrack && sd.st_mode & S_IFREG))
-            {
-                LOGI("App config files already present");
-            }
-            else
+//            resmodel = stat(TrackerFile.c_str(), &sm);
+//            if (restrack == 0 && sd.st_mode & S_IFREG)
+//            {
+//                LOGI("App config files already present");
+//
+//            }
+//            else
             {
                 LOGI("Application config files do not exist. Creating them ...");
                 // read our application config file from the assets inside the apk
@@ -263,12 +266,12 @@ void android_main(android_app* app)
                 const void* triData = AAsset_getBuffer(triFileAsset);
                 const off_t triLen = AAsset_getLength(triFileAsset);
                 FILE* appTriFile = std::fopen(TriFile.c_str(), "w+");
-                AAsset* modelFileAsset = AAssetManager_open(assetManager, "svm.model", AASSET_MODE_BUFFER);
-                const void* modelData = AAsset_getBuffer(modelFileAsset);
-                const off_t modelLen = AAsset_getLength(modelFileAsset);
-                FILE* appModelFile = std::fopen(ModelFile.c_str(), "w+");
+//                AAsset* modelFileAsset = AAssetManager_open(assetManager, "svm.model", AASSET_MODE_BUFFER);
+//                const void* modelData = AAsset_getBuffer(modelFileAsset);
+//                const off_t modelLen = AAsset_getLength(modelFileAsset);
+//                FILE* appModelFile = std::fopen(ModelFile.c_str(), "w+");
 
-                if (NULL == appConfigFile||NULL == appTriFile||NULL == appTrackerFile||NULL == appModelFile)
+                if (NULL == appConfigFile||NULL == appTriFile||NULL == appTrackerFile)
                 {
                     LOGE("Could not create app configuration files");
                 }
@@ -278,7 +281,7 @@ void android_main(android_app* app)
                     rescon =  std::fwrite(configData, sizeof(char), configLen, appConfigFile);
                     restri = std::fwrite(triData, sizeof(char), triLen, appTriFile);
                     restrack = std::fwrite(trackerData, sizeof(char), trackerLen, appTrackerFile);
-                    resmodel = std::fwrite(modelData, sizeof(char), modelLen, appModelFile);
+//                    resmodel = std::fwrite(modelData, sizeof(char), modelLen, appModelFile);
                 if (configLen != rescon)
                     {
                         LOGE("Error generating app configuration file.\n");
@@ -290,37 +293,41 @@ void android_main(android_app* app)
                 AAsset_close(triFileAsset);
                 std::fclose(appTrackerFile);
                 AAsset_close(trackerFileAsset);
-                std::fclose(appModelFile);
-                AAsset_close(modelFileAsset);
+//                std::fclose(appModelFile);
+//                AAsset_close(modelFileAsset);
 
             }
         }
 
     //=======================================================================================
-
+        LOGD("Done some inits");
     ANativeActivity_setWindowFlags(engine.app->activity, AWINDOW_FLAG_KEEP_SCREEN_ON, 0); //set screen always on
 
     float fps = 0;
-    char ftFile[256],conFile[256],triFile[256], modelFile[256];
+    char ftFile[512],conFile[512],triFile[512], modelFile[512];
     bool fcheck = false; double scale = 1; int fpd = -1; bool show = true;
-
+    LOGD("Done some inits");
     //=========================================== set paths to model files
 
-    strcpy(ftFile,TrackerFile.c_str());//"/storage/sdcard0/assets/model/face.tracker");
+    strcpy(ftFile,TrackerFile.c_str());
     strcpy(triFile,TriFile.c_str());//"/storage/sdcard0/assets/model/face.tri");
     strcpy(conFile,ConfigFile.c_str());//"/storage/sdcard0/assets/model/face.con");
-    strcpy(modelFile,ModelFile.c_str());//"/storage/sdcard0/assets/model/svm.model");
+//  strcpy(modelFile,ModelFile.c_str());//"/storage/sdcard0/assets/model/svm.model");
     cv::Mat drawing_frame, gray_frame,temp_frame;
-
+    LOGD("Can access file locations: %s", TrackerFile.c_str());
     //=========================================== init vars and set other tracking parameters
 
     std::vector<int> wSize1(1); wSize1[0] = 7;
     std::vector<int> wSize2(3); wSize2[0] = 11; wSize2[1] = 9; wSize2[2] = 7;
     int nIter = 5; double clamp=3,fTol=0.01;
-    FACETRACKER::Tracker model(ftFile);
-    cv::Mat tri=FACETRACKER::IO::LoadTri(triFile);
-    cv::Mat con=FACETRACKER::IO::LoadCon(conFile);
+    LOGD("Fine till inits");
 
+    FACETRACKER::Tracker model(ftFile);
+//    cv::Mat tri=FACETRACKER::IO::LoadTri(triFile);
+//    cv::Mat con=FACETRACKER::IO::LoadCon(conFile);
+
+
+    LOGD("Fine till inits");
     double top, left, bottom, right;
     cv:: Point topleft,botright;
     const Mat& pose = model._clm._pglobl;
@@ -333,7 +340,7 @@ void android_main(android_app* app)
 
     //================================================ loop waiting for stuff to do
     //================================================ actual vision part
-
+    LOGD("Entering while");
     while (1)
     {
         // Read all pending events.

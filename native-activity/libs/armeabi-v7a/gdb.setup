@@ -1,0 +1,3 @@
+set solib-search-path ./obj/local/armeabi-v7a
+source /home/abhijat/NVPACK/android-ndk-r10d/prebuilt/common/gdb/common.setup
+directory /home/abhijat/NVPACK/android-ndk-r10d/platforms/android-17/arch-arm/usr/include jni /home/abhijat/NVPACK/android-ndk-r10d/sources/android/native_app_glue /home/abhijat/NVPACK/android-ndk-r10d/sources/cxx-stl/gnu-libstdc++ ../../sdk/native/jni/include/opencv ../../sdk/native/jni/include /home/abhijat/NVPACK/android-ndk-r10d/sources/cxx-stl/gnu-libstdc++/4.8/include /home/abhijat/NVPACK/android-ndk-r10d/sources/cxx-stl/gnu-libstdc++/4.8/libs/armeabi-v7a/include /home/abhijat/NVPACK/android-ndk-r10d/sources/cxx-stl/gnu-libstdc++/4.8/include/backward
