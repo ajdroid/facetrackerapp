@@ -14,5 +14,5 @@ Find it at native-activity/bin/FaceTrackerJS.apk
 
 ## License
 
-Available free for non-commercial use, and may be redistributed under these conditions. Please see license.md for complete details. For commercial use, request a quote.
+Available free for non-commercial use, and may be redistributed under these conditions. Please see license.md for complete details. For commercial use, [request a quote](http://facetracker.net/quote/).
 

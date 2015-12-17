@@ -1,4 +1,4 @@
-Summary: FaceTracker is available for non-commercial use only. For commercial use, request a quote.The complete license follows.
+Summary: FaceTracker is available for non-commercial use only. For commercial use, [request a quote](http://facetracker.net/quote/). The complete license follows.
 
 Copyright (C) 2010, Jason Mora Saragih, all rights reserved.
 
