@@ -10,7 +10,7 @@ An Android port of : [Jason Saragih](http://jsaragih.org/) and [Kyle McDonald](h
 
 ## apk file
 
-Find it at native-activity/bin/FaceTrackerJS.apk
+Find it at `native-activity/bin/FaceTrackerJS.apk`
 
 ## License
 
